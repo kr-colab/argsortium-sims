@@ -4,17 +4,21 @@ Main Snakefile for population genetic simulations.
 This workflow simulates tree sequences across multiple chromosomes
 using stdpopsim and msprime. Each chromosome is simulated independently
 and can be run in parallel.
+
+Pipeline:
+1. simulate rule: Generate ancestry tree sequences (no mutations)
+2. mutate rule: Add mutations to tree sequences
 """
 
 # Load configuration
 configfile: "config/config.yaml"
 
 
-# Define final outputs - one tree sequence per chromosome
+# Define final outputs - one mutated tree sequence per chromosome
 rule all:
     input:
         expand(
-            "{outdir}/{species}_{model}/{contig}/sim.trees",
+            "{outdir}/{species}_{model}/{contig}/sim.mutated.trees",
             outdir=config["output_dir"],
             species=config["species_name"],
             model=config["model_name"],
@@ -24,3 +28,4 @@ rule all:
 
 # Include simulation rules
 include: "rules/simulate.smk"
+include: "rules/mutate.smk"

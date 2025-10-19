@@ -19,7 +19,12 @@ genetic_map: "HapMapII_GRCh38"
 add_outgroup: true
 outgroup_time: 215000 # generations ago
 
-base_seed: 42 # Each contig gets: base_seed + contig_index
+# Mutation parameters
+mutation_model: "HKY" # Options: HKY, JC69, GTR, BinaryMutationModel
+discrete_genome: true # Use discrete genome (finite sites)
+
+# Reproducibility
+base_seed: 666 # Each contig gets: base_seed + contig_index
 
 # Output
 output_dir: "results/simulations"
