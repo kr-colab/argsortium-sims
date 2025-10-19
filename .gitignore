@@ -1,0 +1,16 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+CLAUDE.md
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Snakemake outputs
+results/
+logs/
+.snakemake/

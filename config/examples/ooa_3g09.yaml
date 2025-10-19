@@ -1,0 +1,50 @@
+# Example configuration: Out of Africa 3 population model
+# This simulates human demographic history with YRI, CEU, and CHB populations
+
+# Simulation parameters
+species_name: "HomSap"
+model_name: "OutOfAfrica_3G09"
+
+# Sample configuration
+samples:
+  YRI: 1 # Yoruba
+  CEU: 1 # Utah Residents (CEPH)
+  CHB: 1 # Han Chinese
+
+# Chromosome list for parallelization
+# For full genome simulation, uncomment all chromosomes
+contigs:
+  - chr1
+  - chr2
+  - chr3
+  - chr4
+  - chr5
+  - chr6
+  - chr7
+  - chr8
+  - chr9
+  - chr10
+  - chr11
+  - chr12
+  - chr13
+  - chr14
+  - chr15
+  - chr16
+  - chr17
+  - chr18
+  - chr19
+  - chr20
+  - chr21
+  - chr22
+
+# Genetic map
+genetic_map: "HapMapII_GRCh38"
+
+# Outgroup configuration
+add_outgroup: true
+outgroup_time: 215000 # generations ago (chimp divergence)
+
+base_seed: 42 # Each contig gets: base_seed + contig_index
+
+# Output
+output_dir: "results/simulations"
