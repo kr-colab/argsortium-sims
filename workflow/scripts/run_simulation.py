@@ -4,6 +4,8 @@ This script is called by Snakemake with parameters injected via the snakemake ob
 """
 import stdpopsim
 import msprime
+import tszip
+import numpy as np
 import time
 import sys
 
@@ -36,10 +38,10 @@ def ratemap_to_hapmap(
 def check_ratemap(ratemap: msprime.RateMap, path: str):
     ratemap_ck = msprime.RateMap.read_hapmap(path, map_col=3)
     assert np.allclose(ratemap.position, ratemap_ck.position)
-    assert np.allclose(ratemap.rate, ratemap_ck.rate)
+    assert np.allclose(ratemap.rate, ratemap_ck.rate, equal_nan=True)
     ratemap_ck = msprime.RateMap.read_hapmap(path, rate_col=2)
     assert np.allclose(ratemap.position, ratemap_ck.position)
-    assert np.allclose(ratemap.rate, ratemap_ck.rate)
+    assert np.allclose(ratemap.rate, ratemap_ck.rate, equal_nan=True)
 
 
 def main():
@@ -75,7 +77,7 @@ def main():
 
     # Save genetic map
     with open(output_genmap, "w") as f:
-        f.write(ratemap_to_hapmap(contig.recombination_map))
+        f.write(ratemap_to_hapmap(contig.recombination_map, contig_name))
     check_ratemap(contig.recombination_map, output_genmap)
 
     if add_outgroup:
@@ -113,7 +115,7 @@ def main():
         ts = new_tables.tree_sequence()
 
     # Save tree sequence
-    ts.dump(output_trees)
+    tszip.compress(ts, output_trees)
 
     # End timing
     end_time = time.time()

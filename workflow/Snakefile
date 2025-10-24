@@ -8,6 +8,7 @@ and can be run in parallel.
 Pipeline:
 1. simulate rule: Generate ancestry tree sequences (no mutations)
 2. mutate rule: Add mutations to tree sequences
+3. vcf rule: Write into a VCF applying perturbations such as mispolarisation
 """
 
 # Load configuration
@@ -18,14 +19,16 @@ configfile: "config/config.yaml"
 rule all:
     input:
         expand(
-            "{outdir}/{species}_{model}/{contig}/sim.mutated.trees",
+            "{outdir}/{species}_{model}/{contig}/sim.mutated.{suffix}",
             outdir=config["output_dir"],
             species=config["species_name"],
             model=config["model_name"],
-            contig=config["contigs"]
+            contig=config["contigs"],
+            suffix=["vcf.gz", "trees"],
         )
 
 
 # Include simulation rules
 include: "rules/simulate.smk"
 include: "rules/mutate.smk"
+include: "rules/vcf.smk"

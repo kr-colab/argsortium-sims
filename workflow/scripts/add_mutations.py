@@ -4,7 +4,7 @@ This script is called by Snakemake with parameters injected via the snakemake ob
 """
 import stdpopsim
 import msprime
-import tskit
+import tszip
 import time
 
 
@@ -31,7 +31,7 @@ def main():
     start_time = time.time()
 
     # Load the tree sequence from simulate rule (ancestry only, no mutations)
-    ts = tskit.load(input_trees)
+    ts = tszip.load(input_trees)
 
     # Get mutation rate from stdpopsim species
     species = stdpopsim.get_species(species_name)
@@ -66,7 +66,7 @@ def main():
     )
 
     # Save mutated tree sequence
-    ts_mutated.dump(output_trees)
+    tszip.compress(ts_mutated, output_trees)
 
     # End timing
     end_time = time.time()

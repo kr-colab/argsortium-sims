@@ -14,3 +14,7 @@ CLAUDE.md
 results/
 logs/
 .snakemake/
+
+# vim
+*.swp
+*.swo

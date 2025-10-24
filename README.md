@@ -9,6 +9,7 @@ This pipeline simulates tree sequences across multiple chromosomes using demogra
 **Pipeline steps:**
 1. **Simulate ancestry**: Generate coalescent tree sequences without mutations
 2. **Add mutations**: Overlay mutations on the tree sequences using specified mutation models
+3. **Write output**: Write out VCF, applying perturbations like mispolarisation or masking
 
 ## Requirements
 
@@ -114,9 +115,9 @@ uv run snakemake --snakefile workflow/Snakefile --dag | dot -Tpdf > dag.pdf
 
 Each chromosome simulation produces:
 
-- `{output_dir}/{species}_{model}/{contig}/sim.trees` - Tree sequence (ancestry only, no mutations)
+- `{output_dir}/{species}_{model}/{contig}/sim.tsz` - Tree sequence (ancestry only, no mutations, compressed with `tszip`)
 - `{output_dir}/{species}_{model}/{contig}/sim.log` - Ancestry simulation timing and statistics
-- `{output_dir}/{species}_{model}/{contig}/sim.mutated.trees` - Tree sequence with mutations
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.tsz` - Tree sequence with mutations, compressed with `tszip`
 - `{output_dir}/{species}_{model}/{contig}/sim.mutated.log` - Mutation timing and statistics
 
 Example output location:
