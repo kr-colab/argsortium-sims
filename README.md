@@ -115,19 +115,12 @@ uv run snakemake --snakefile workflow/Snakefile --dag | dot -Tpdf > dag.pdf
 
 Each chromosome simulation produces:
 
-- `{output_dir}/{species}_{model}/{contig}/sim.tsz` - Tree sequence (ancestry only, no mutations, compressed with `tszip`)
+- `{output_dir}/{species}_{model}/{contig}/sim.trees` - Tree sequence (ancestry only, no mutations, compressed with `tszip`)
 - `{output_dir}/{species}_{model}/{contig}/sim.log` - Ancestry simulation timing and statistics
-- `{output_dir}/{species}_{model}/{contig}/sim.mutated.tsz` - Tree sequence with mutations, compressed with `tszip`
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.trees` - Tree sequence with mutations, compressed with `tszip`
 - `{output_dir}/{species}_{model}/{contig}/sim.mutated.log` - Mutation timing and statistics
-
-Example output location:
-```
-results/simulations/HomSap_OutOfAfrica_3G09/chr22/
-├── sim.trees           # Ancestry only
-├── sim.log             # Ancestry log
-├── sim.mutated.trees   # With mutations (final output)
-└── sim.mutated.log     # Mutation log
-```
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.vcf.gz` - `gzip` compressed VCF output
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.vcf.log` - VCF timing and statistics
 
 ## Mutation Models
 
