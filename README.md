@@ -119,7 +119,9 @@ Each chromosome simulation produces:
 - `{output_dir}/{species}_{model}/{contig}/sim.log` - Ancestry simulation timing and statistics
 - `{output_dir}/{species}_{model}/{contig}/sim.mutated.trees` - Tree sequence with mutations, compressed with `tszip`
 - `{output_dir}/{species}_{model}/{contig}/sim.mutated.log` - Mutation timing and statistics
-- `{output_dir}/{species}_{model}/{contig}/sim.mutated.vcf.gz` - `gzip` compressed VCF output
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.vcf.gz` - `gzip` compressed VCF output, positions incremented by one relative to tree sequence
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.ancestral.fa.gz` - `gzip` compressed ancestral fasta
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.outgroup.fa.gz` - `gzip` compressed outgroup fasta
 - `{output_dir}/{species}_{model}/{contig}/sim.mutated.vcf.log` - VCF timing and statistics
 
 ## Mutation Models

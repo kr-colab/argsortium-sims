@@ -100,15 +100,23 @@ def main():
         # Dump the tree sequence tables
         new_tables = ts.dump_tables()
 
+        # Add a population for the outgroup
+        outgroup_population = new_tables.populations.add_row(
+            metadata={"name": "outgroup", "description": "sample used to call ancestral state"}
+        )
+
         # Get the outgroup node id
         outgroup_indices = []
         for i, node in enumerate(new_tables.nodes):
             if node.time == outgroup_time:
                 outgroup_indices.append(i)
 
-        # Replace outgroup node times with 0.0
+        # Make outgroup sample contemporary and in its own populaiton
         for ind in outgroup_indices:
-            new_tables.nodes[ind] = new_tables.nodes[ind].replace(time=0.0)
+            new_tables.nodes[ind] = new_tables.nodes[ind].replace(
+                time=0.0, 
+                population=outgroup_population,
+            )
 
         # Re-sort the tables and re-create the tree sequence
         new_tables.sort()
