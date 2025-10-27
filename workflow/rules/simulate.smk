@@ -9,7 +9,8 @@ rule simulate:
     """
     output:
         trees="{outdir}/{species}_{model}/{contig}/sim.trees",
-        log="{outdir}/{species}_{model}/{contig}/sim.log"
+        log="{outdir}/{species}_{model}/{contig}/sim.log",
+        genmap="{outdir}/{species}_{model}/{contig}/sim.hapmap",
     params:
         species=config["species_name"],
         model=config["model_name"],

@@ -9,6 +9,7 @@ This pipeline simulates tree sequences across multiple chromosomes using demogra
 **Pipeline steps:**
 1. **Simulate ancestry**: Generate coalescent tree sequences without mutations
 2. **Add mutations**: Overlay mutations on the tree sequences using specified mutation models
+3. **Write output**: Write out VCF, applying perturbations like mispolarisation or masking
 
 ## Requirements
 
@@ -114,19 +115,14 @@ uv run snakemake --snakefile workflow/Snakefile --dag | dot -Tpdf > dag.pdf
 
 Each chromosome simulation produces:
 
-- `{output_dir}/{species}_{model}/{contig}/sim.trees` - Tree sequence (ancestry only, no mutations)
+- `{output_dir}/{species}_{model}/{contig}/sim.trees` - Tree sequence (ancestry only, no mutations, compressed with `tszip`)
 - `{output_dir}/{species}_{model}/{contig}/sim.log` - Ancestry simulation timing and statistics
-- `{output_dir}/{species}_{model}/{contig}/sim.mutated.trees` - Tree sequence with mutations
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.trees` - Tree sequence with mutations, compressed with `tszip`
 - `{output_dir}/{species}_{model}/{contig}/sim.mutated.log` - Mutation timing and statistics
-
-Example output location:
-```
-results/simulations/HomSap_OutOfAfrica_3G09/chr22/
-├── sim.trees           # Ancestry only
-├── sim.log             # Ancestry log
-├── sim.mutated.trees   # With mutations (final output)
-└── sim.mutated.log     # Mutation log
-```
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.vcf.gz` - `gzip` compressed VCF output, positions incremented by one relative to tree sequence
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.ancestral.fa.gz` - `gzip` compressed ancestral fasta
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.outgroup.fa.gz` - `gzip` compressed outgroup fasta
+- `{output_dir}/{species}_{model}/{contig}/sim.mutated.vcf.log` - VCF timing and statistics
 
 ## Mutation Models
 

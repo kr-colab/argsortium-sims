@@ -4,8 +4,44 @@ This script is called by Snakemake with parameters injected via the snakemake ob
 """
 import stdpopsim
 import msprime
+import tszip
+import numpy as np
 import time
 import sys
+
+
+def ratemap_to_hapmap(
+    ratemap: msprime.RateMap, 
+    contig_name: str, 
+    missing_as_zero: bool = False,
+) -> str:
+    """
+    Write a recombination rate map into hapmap format.
+    """
+    physical_position = ratemap.position.astype(np.int64)
+    scaled_rate = ratemap.rate * 1e8
+    map_position = ratemap.get_cumulative_mass(physical_position) * 100
+    hapmap = ["Chromosome\tPosition(bp)\tRate(cM/Mb)\tMap(cM)"]
+    if missing_as_zero: 
+        scaled_rate[np.isnan(scaled_rate)] = 0.0
+    if np.isnan(scaled_rate[-1]):  # handle trailing NaN
+        scaled_rate[-1] = 0.0
+    else:
+        scaled_rate = np.append(scaled_rate, 0.0)
+    for rate, pos, map in zip(scaled_rate, physical_position, map_position):
+        if not np.isnan(rate): 
+            hapmap.append(f"{contig_name}\t{pos}\t{rate:.10f}\t{map:.10f}")
+    hapmap = "\n".join(hapmap) + "\n"
+    return hapmap
+
+
+def check_ratemap(ratemap: msprime.RateMap, path: str):
+    ratemap_ck = msprime.RateMap.read_hapmap(path, map_col=3)
+    assert np.allclose(ratemap.position, ratemap_ck.position)
+    assert np.allclose(ratemap.rate, ratemap_ck.rate, equal_nan=True)
+    ratemap_ck = msprime.RateMap.read_hapmap(path, rate_col=2)
+    assert np.allclose(ratemap.position, ratemap_ck.position)
+    assert np.allclose(ratemap.rate, ratemap_ck.rate, equal_nan=True)
 
 
 def main():
@@ -22,6 +58,7 @@ def main():
     # Output files
     output_trees = snakemake.output.trees
     output_log = snakemake.output.log
+    output_genmap = snakemake.output.genmap
 
     # Calculate chromosome-specific seed
     # Extract contig index from config's contig list
@@ -37,6 +74,11 @@ def main():
     model = species.get_demographic_model(model_name)
     contig = species.get_contig(contig_name, genetic_map=genetic_map)
     samples = model.get_sample_sets(sample_dict)
+
+    # Save genetic map
+    with open(output_genmap, "w") as f:
+        f.write(ratemap_to_hapmap(contig.recombination_map, contig_name))
+    check_ratemap(contig.recombination_map, output_genmap)
 
     if add_outgroup:
         # Add an ancient sample from population 0 at specified time
@@ -58,22 +100,30 @@ def main():
         # Dump the tree sequence tables
         new_tables = ts.dump_tables()
 
+        # Add a population for the outgroup
+        outgroup_population = new_tables.populations.add_row(
+            metadata={"name": "outgroup", "description": "sample used to call ancestral state"}
+        )
+
         # Get the outgroup node id
         outgroup_indices = []
         for i, node in enumerate(new_tables.nodes):
             if node.time == outgroup_time:
                 outgroup_indices.append(i)
 
-        # Replace outgroup node times with 0.0
+        # Make outgroup sample contemporary and in its own populaiton
         for ind in outgroup_indices:
-            new_tables.nodes[ind] = new_tables.nodes[ind].replace(time=0.0)
+            new_tables.nodes[ind] = new_tables.nodes[ind].replace(
+                time=0.0, 
+                population=outgroup_population,
+            )
 
         # Re-sort the tables and re-create the tree sequence
         new_tables.sort()
         ts = new_tables.tree_sequence()
 
     # Save tree sequence
-    ts.dump(output_trees)
+    tszip.compress(ts, output_trees)
 
     # End timing
     end_time = time.time()
