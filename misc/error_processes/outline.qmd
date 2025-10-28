@@ -1,0 +1,110 @@
+---
+title: "Error processes"
+author: ""
+affiliation: ""
+email: ""
+venue: ""
+date: "27 Oct 25"
+date-format: "MMM D, YYYY"
+format: 
+  revealjs:
+    html-math-method: mathjax
+    theme: white
+    template-partials:
+      - title-slide.html
+---
+
+
+# Simulating error processes
+
+::: {.incremental}
+
+- Simple enough to be generalizable
+
+- Realistic enough to reveal pathologies
+
+- "Realistic" $\sim$ dependent on genealogies
+
+:::
+
+
+# Simulating error processes
+
+::: {.incremental}
+
+- Genotyping error (boring)
+
+- Mispolarisation
+
+- Missing data
+
+- Phasing error
+
+- Structural variation
+
+:::
+
+
+# Genotyping error
+
+::: {.incremental}
+
+- Poisson coverage, multinomial allele counts
+
+- Adds singletons, perturbs clades
+
+- Not very interesting; Worth doing?
+
+:::
+
+
+# Mispolarisation
+
+::: {.incremental}
+
+- Add outgroup(s) to demographic model
+
+- Use majority/parsimony to assign ancestral state
+
+- Mispolarisation where there's ILS
+
+:::
+
+
+# Missing data
+
+::: {.incremental}
+
+- "inaccessible sequence" (coarse mask, independent from genealogies)
+
+- Small SVs (e.g. missing around indels), depends on genealogies
+
+- Lay down mutations, draw "gap size" from geometric
+
+:::
+
+
+# Phasing error
+
+::: {.incremental}
+
+- Simulate large ARG
+
+- Set aside "reference panel"
+
+- Phase remainder with shapeit
+
+:::
+
+
+# Structural variation
+
+::: {.incremental}
+
+- Collapsed paralogs laid on trees like for "missing data"
+
+- For larger SVs, simulate directly under SLiM
+
+- How well does inference work "within" mid-frequency large SVs
+
+:::
