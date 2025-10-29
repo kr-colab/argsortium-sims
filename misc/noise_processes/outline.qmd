@@ -1,10 +1,10 @@
 ---
-title: "Error processes"
+title: "Noise processes"
 author: ""
 affiliation: ""
 email: ""
 venue: ""
-date: "27 Oct 25"
+date: "28 Oct 25"
 date-format: "MMM D, YYYY"
 format: 
   revealjs:
@@ -15,7 +15,7 @@ format:
 ---
 
 
-# Simulating error processes
+# Simulating noise processes
 
 ::: {.incremental}
 
@@ -25,10 +25,12 @@ format:
 
 - "Realistic" $\sim$ dependent on genealogies
 
+- Parametric bootstrap
+
 :::
 
 
-# Simulating error processes
+# Simulating noise processes
 
 ::: {.incremental}
 
@@ -39,6 +41,8 @@ format:
 - Missing data
 
 - Phasing error
+
+- Mutation rate variation
 
 - Structural variation
 
@@ -67,6 +71,8 @@ format:
 - Use majority/parsimony to assign ancestral state
 
 - Mispolarisation where there's ILS
+
+- Could add "gaps" as mutations (e.g. small unalignable SVs)
 
 :::
 
@@ -97,14 +103,28 @@ format:
 :::
 
 
+# Mutation rate variation
+
+::: {.incremental}
+
+- Super straightforward to add
+
+- What reversible model to use?
+
+- Context dependence?
+
+:::
+
+
 # Structural variation
 
 ::: {.incremental}
 
-- Collapsed paralogs laid on trees like for "missing data"
-
-- For larger SVs, simulate directly under SLiM
+- Simulate directly under SLiM
 
 - How well does inference work "within" mid-frequency large SVs
+
+- Collapsed paralogs laid on trees like for "missing data"
+
 
 :::
