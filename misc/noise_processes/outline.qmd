@@ -128,3 +128,84 @@ format:
 
 
 :::
+
+
+# Current pipeline status
+
+::: {.incremental}
+
+- **Fully implemented**: stdpopsim + msprime + Snakemake workflow
+
+- **Working**: Ancestry simulation, mutations (HKY/JC69/GTR), VCF output
+
+- **Basic outgroup support**: Already simulates outgroup, outputs ancestral/outgroup FASTA
+
+- **Planned**: Mispolarisation, missing data masking, phasing error (placeholders exist)
+
+- **Parallelizable**: Per-chromosome execution, reproducible seeding
+
+:::
+
+
+# Project structure
+
+::: {.columns}
+
+::: {.column width="50%"}
+**Workflow:**
+```{.bash style="font-size: 0.6em;"}
+argsortium-sims/
+├── workflow/
+│   ├── Snakefile
+│   ├── rules/
+│   │   ├── simulate.smk
+│   │   ├── mutate.smk
+│   │   └── vcf.smk
+│   └── scripts/
+│       ├── run_simulation.py
+│       ├── add_mutations.py
+│       └── write_vcf.py
+├── config/
+│   ├── config.yaml
+│   └── examples/
+└── logs/
+```
+:::
+
+::: {.column width="50%"}
+**Results:**
+```{.bash style="font-size: 0.6em;"}
+results/
+└── simulations/
+    └── HomSap_OutOfAfrica_3G09/
+        └── chr22/
+            ├── sim.trees
+            ├── sim.log
+            ├── sim.hapmap
+            ├── sim.mutated.trees
+            ├── sim.mutated.log
+            ├── sim.mutated.vcf.gz
+            ├── sim.mutated.vcf.log
+            ├── sim.mutated.ancestral.fa.gz
+            └── sim.mutated.outgroup.fa.gz
+```
+:::
+
+:::
+
+
+# Next steps
+
+::: {.incremental}
+
+- Implement mispolarisation using outgroup + parsimony
+
+- Add geometric-distributed missing data around variants
+
+- Integrate phasing error via shapeit/reference panels
+
+- Add mutation rate heterogeneity across sites
+
+- Extend to SLiM for structural variation
+
+:::
