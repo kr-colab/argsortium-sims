@@ -4,31 +4,19 @@ model_name: "OutOfAfrica_3G09"
 
 # Sample configuration
 samples:
-        YRI: 0 # Yoruba
+        YRI: 5 # Yoruba
         CEU: 0 # Utah Residents (CEPH)
-        CHB: 15 # Han Chinese
+        CHB: 10 # Han Chinese
 
 # Chromosome list for parallelization
 contigs:
           - chr: chr14
             start: 27572179
-            end: 28372179
-
-          - chr: chr19
-            start: 11089418
-            end: 12089418
+            end: 28322179
 
           - chr: chr1
-            start: 55039445
-            end: 55939445
-
-          - chr: chr17
-            start: 55039445
-            end: 55939445
-
-          - chr: chr11
-            start: 116827019
-            end: 117727019
+            start: 37572179
+            end: 38322179
 
 # Genetic map
 genetic_map: "HapMapII_GRCh38"
@@ -42,10 +30,7 @@ mutation_model: "HKY" # Options: HKY, JC69, GTR, BinaryMutationModel
 discrete_genome: true # Use discrete genome (finite sites)
 
 # Reproducibility
-base_seed: 666
-
-seeds : [666, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
-
+base_seed: 666 # Each contig gets: base_seed + contig_index + first digit of start + last digit of end
 
 # Output
-output_dir: "/grid/siepel/home/khalid/argsortium-outputs"
+output_dir: "results/simulations"

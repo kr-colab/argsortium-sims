@@ -10,23 +10,54 @@ Pipeline:
 2. mutate rule: Add mutations to tree sequences
 3. vcf rule: Write into a VCF applying perturbations such as mispolarisation
 """
+import re
+
+def parse_chromosome(chr_string):
+    """Parse chromosome string to extract the chromosome number or letter (e.g., 'chr1' -> '1', 'CHRX' -> 'X')."""
+    return re.match(r'chr(.+)', chr_string, re.IGNORECASE).group(1) if re.match(r'chr(.+)', chr_string, re.IGNORECASE) else chr_string
+
 
 # Load configuration
-configfile: "config/config.yaml"
+configfile: "../config/config.yaml"
 
+#FIXME: create population string - Needs to be generalized to allow multiple different models
+population_str = (
+    f"YRI_{config['samples']['YRI']}"
+    f"_CEU_{config['samples']['CEU']}"
+    f"_CHB_{config['samples']['CHB']}"
+)
+
+# Parse the contig list and create seed numbers
+contig_info = config["contigs"]  # list of dictionaries [{chr: chr, start: start, end: end}]
+base_seed = config["base_seed"]
+
+# Get list of seeds to iterate over (if specified in config)
+# If 'seeds' is not in config, default to just the base_seed
+seed_list = config.get("seeds", [base_seed])
+
+# Create lists for expansion - one entry per contig
+contig_data = []
+for info in contig_info:
+    contig_data.append({
+        'chr': info["chr"],
+        'start': info["start"],
+        'end': info["end"]
+    })
+
+# Extract separate lists for expand()
+contigs = [d['chr'] for d in contig_data]
+starts = [d['start'] for d in contig_data]
+ends = [d['end'] for d in contig_data]
 
 # Define final outputs - one mutated tree sequence per chromosome
 rule all:
     input:
-        expand(
-            "{outdir}/{species}_{model}/{contig}/sim.mutated.{suffix}",
-            outdir=config["output_dir"],
-            species=config["species_name"],
-            model=config["model_name"],
-            contig=config["contigs"],
-            suffix=["vcf.gz", "trees"],
-        )
-
+        [
+            f"{config['output_dir']}/{config['species_name']}_{config['model_name']}/{d['chr']}_{d['start']}_{d['end']}/{population_str}/sim_seed{seed}.mutated.{suffix}"
+            for d in contig_data
+            for seed in seed_list
+            for suffix in ["vcf.gz", "trees"]
+        ]
 
 # Include simulation rules
 include: "rules/simulate.smk"

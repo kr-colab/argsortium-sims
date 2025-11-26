@@ -34,11 +34,11 @@ def ratemap_to_hapmap(
     return hapmap
 
 
-def check_ratemap(ratemap: msprime.RateMap, path: str, seq_length):
-    ratemap_ck = msprime.RateMap.read_hapmap(path, map_col=3, sequence_length = seq_length)
+def check_ratemap(ratemap: msprime.RateMap, path: str):
+    ratemap_ck = msprime.RateMap.read_hapmap(path, map_col=3)
     assert np.allclose(ratemap.position, ratemap_ck.position)
     assert np.allclose(ratemap.rate, ratemap_ck.rate, equal_nan=True)
-    ratemap_ck = msprime.RateMap.read_hapmap(path, rate_col=2, sequence_length = seq_length)
+    ratemap_ck = msprime.RateMap.read_hapmap(path, rate_col=2)
     assert np.allclose(ratemap.position, ratemap_ck.position)
     assert np.allclose(ratemap.rate, ratemap_ck.rate, equal_nan=True)
 
@@ -72,7 +72,7 @@ def main():
     # Save genetic map
     with open(output_genmap, "w") as f:
         f.write(ratemap_to_hapmap(contig.recombination_map, contig_name))
-    check_ratemap(contig.recombination_map, output_genmap, contig.length)
+    check_ratemap(contig.recombination_map, output_genmap)
 
     if add_outgroup:
         # Add an ancient sample from population 0 at specified time

@@ -16,16 +16,11 @@ def main():
     genetic_map = snakemake.params.genetic_map
     mutation_model = snakemake.params.mutation_model
     discrete_genome = snakemake.params.discrete_genome
-    base_seed = snakemake.params.seed
+    seed = snakemake.wildcards.seed
 
     # Output files
     output_trees = snakemake.output.trees
     output_log = snakemake.output.log
-
-    # Calculate chromosome-specific seed (offset by 1000 to differentiate from ancestry seed)
-    contig_list = snakemake.config["contigs"]
-    contig_index = contig_list.index(contig_name)
-    seed = base_seed + contig_index + 1000
 
     # Start timing
     start_time = time.time()
