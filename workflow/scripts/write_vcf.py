@@ -72,7 +72,7 @@ def main():
         position_transform=lambda x: np.array(x).astype(np.int64) + 1 if increment_positions else None,
     )
 
-    # Save ancestral and outgroup states as gzipped fasta
+    # Save ancestral and outgroup states as gzipped fasta, #FIXME: write bgzip file instead so it's easy to run with tsiner
     with gzip.open(output_ancestral, "tw") as f:
         f.write(f">{contig_name}\n" + "".join(ancestral_states) + "\n")
     with gzip.open(output_outgroup, "tw") as f:

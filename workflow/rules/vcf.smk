@@ -8,14 +8,14 @@ rule vcf:
     masking of variants, or phasing error.
     """
     input:
-        trees="{outdir}/{species}_{model}/{contig}_{start}_{end}/{pop_str}/sim_seed{seed}.mutated.trees"
+        trees="{outdir}/{species}_{model}/{pop_str}/{contig}_{start}_{end}_sim_seed{seed}.mutated.trees"
     output:
-        vcf="{outdir}/{species}_{model}/{contig}_{start}_{end}/{pop_str}/sim_seed{seed}.mutated.vcf.gz",
-        ancestral_fasta="{outdir}/{species}_{model}/{contig}_{start}_{end}/{pop_str}/sim_seed{seed}.mutated.ancestral.fa.gz",
-        outgroup_fasta="{outdir}/{species}_{model}/{contig}_{start}_{end}/{pop_str}/sim_seed{seed}.mutated.outgroup.fa.gz",
-        log="{outdir}/{species}_{model}/{contig}_{start}_{end}/{pop_str}/sim_seed{seed}.mutated.vcf.log",
+        vcf="{outdir}/{species}_{model}/{pop_str}/{contig}_{start}_{end}_sim_seed{seed}.mutated.vcf.gz",
+        ancestral_fasta="{outdir}/{species}_{model}/{pop_str}/{contig}_{start}_{end}_sim_seed{seed}.mutated.ancestral.fa.gz",
+        outgroup_fasta="{outdir}/{species}_{model}/{pop_str}/{contig}_{start}_{end}_sim_seed{seed}.mutated.outgroup.fa.gz",
+        log="{outdir}/{species}_{model}/{pop_str}/{contig}_{start}_{end}_sim_seed{seed}.mutated.vcf.log",
     log:
-        "logs/{outdir}/{species}_{model}/{contig}_{start}_{end}/{pop_str}/sim_seed{seed}.vcf.snakemake.log"
+        "logs/{outdir}/{species}_{model}/{pop_str}/{contig}_{start}_{end}_sim_seed{seed}.vcf.snakemake.log"
     params:
         add_outgroup = config["add_outgroup"],
         increment_positions = config.get("increment_vcf_positions", True),

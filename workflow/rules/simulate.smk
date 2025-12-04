@@ -4,16 +4,13 @@ rule simulate:
     """
     output:
         trees=(
-            "{outdir}/{species}_{model}/{contig}_{start}_{end}/"
-            "{pop_str}/sim_seed{seed}.init.trees"
+            "{outdir}/{species}_{model}/{pop_str}/{contig}_{start}_{end}_sim_seed{seed}.init.trees"
         ),
         log=(
-            "{outdir}/{species}_{model}/{contig}_{start}_{end}/"
-            "{pop_str}/sim_seed{seed}.init.log"
+            "{outdir}/{species}_{model}/{pop_str}/{contig}_{start}_{end}_sim_seed{seed}.init.log"
         ),
         genmap=(
-            "{outdir}/{species}_{model}/{contig}_{start}_{end}/"
-            "{pop_str}/sim_seed{seed}.hapmap"
+            "{outdir}/{species}_{model}/{pop_str}/{contig}_{start}_{end}_sim_seed{seed}.hapmap"
         )
     params:
         species=config["species_name"],
