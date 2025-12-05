@@ -56,10 +56,11 @@ rule all:
             f"{config['output_dir']}/{config['species_name']}_{config['model_name']}/{population_str}/{d['chr']}_{d['start']}_{d['end']}_sim_seed{seed}.mutated.{suffix}"
             for d in contig_data
             for seed in seed_list
-            for suffix in ["vcf.gz", "trees"]
+            for suffix in ["vcf.gz", "trees", "params.csv"]
         ]
 
 # Include simulation rules
 include: "rules/simulate.smk"
 include: "rules/mutate.smk"
 include: "rules/vcf.smk"
+include: "rules/log_parser.smk"

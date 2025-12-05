@@ -34,11 +34,11 @@ def ratemap_to_hapmap(
     return hapmap
 
 
-def check_ratemap(ratemap: msprime.RateMap, path: str):
-    ratemap_ck = msprime.RateMap.read_hapmap(path, map_col=3)
+def check_ratemap(ratemap: msprime.RateMap, path: str, seq_length):
+    ratemap_ck = msprime.RateMap.read_hapmap(path, map_col=3, sequence_length = seq_length)
     assert np.allclose(ratemap.position, ratemap_ck.position)
     assert np.allclose(ratemap.rate, ratemap_ck.rate, equal_nan=True)
-    ratemap_ck = msprime.RateMap.read_hapmap(path, rate_col=2)
+    ratemap_ck = msprime.RateMap.read_hapmap(path, rate_col=2, sequence_length = seq_length)
     assert np.allclose(ratemap.position, ratemap_ck.position)
     assert np.allclose(ratemap.rate, ratemap_ck.rate, equal_nan=True)
 
@@ -72,7 +72,7 @@ def main():
     # Save genetic map
     with open(output_genmap, "w") as f:
         f.write(ratemap_to_hapmap(contig.recombination_map, contig_name))
-    check_ratemap(contig.recombination_map, output_genmap)
+    check_ratemap(contig.recombination_map, output_genmap, contig.length)
 
     if add_outgroup:
         # Add an ancient sample from population 0 at specified time
@@ -129,9 +129,11 @@ def main():
         f.write(f"=" * 50 + "\n")
         f.write(f"Species: {species_name}\n")
         f.write(f"Model: {model_name}\n")
-        f.write(f"Contig: {contig_name}\n")
+        f.write(f"Contig: {contig_name}:{contig_start}-{contig_end}\n")
         f.write(f"Contig length: {contig.length:,} bp\n")
+        f.write(f"Simulated sequence length: {contig_end - contig_start} bp\n")
         f.write(f"Genetic map: {genetic_map}\n")
+        f.write(f"Genetic map written to: {output_genmap}\n")
         f.write(f"Samples: {sample_dict}\n")
         f.write(f"Add outgroup: {add_outgroup}\n")
         if add_outgroup:
