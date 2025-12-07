@@ -134,8 +134,7 @@ def main():
         f.write(f"Simulated sequence length: {contig_end - contig_start} bp\n")
         f.write(f"Genetic map: {genetic_map}\n")
         f.write(f"Genetic map written to: {output_genmap}\n")
-        pop_str = "_".join([f"{pop}_{count}" for pop, count in sample_dict.items()])
-        f.write(f"Population string: {pop_str}\n")
+        f.write(f"Samples: {sample_dict}\n")
         f.write(f"Add outgroup: {add_outgroup}\n")
         if add_outgroup:
             f.write(f"Outgroup time: {outgroup_time:,} generations\n")

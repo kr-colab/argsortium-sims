@@ -41,7 +41,15 @@ samples:
 
 # Chromosome list for parallelization
 contigs:
-  - chr22
+  # Chromosome list for parallelization
+contigs:
+          - chr: chr14
+            start: 27572179
+            end: 28372179
+
+          - chr: chr19
+            start: 11089418
+            end: 12089418
 
 # Genetic map
 genetic_map: "HapMapII_GRCh38"
@@ -55,7 +63,7 @@ mutation_model: "HKY"  # Options: HKY, JC69, GTR, BinaryMutationModel
 discrete_genome: true  # Use discrete genome (finite sites)
 
 # Reproducibility
-base_seed: 42  # Each contig gets: base_seed + contig_index
+seeds : [1, 2, 3, 4] #creates a unique combo of contig_start_end_seed
 
 # Output
 output_dir: "results/simulations"
@@ -113,16 +121,18 @@ uv run snakemake --snakefile workflow/Snakefile --dag | dot -Tpdf > dag.pdf
 
 ## Output
 
-Each chromosome simulation produces:
+Each chromosome simulation produces 10 files:
 
-- `{output_dir}/{species}_{model}/{contig}/sim.trees` - Tree sequence (ancestry only, no mutations, compressed with `tszip`)
-- `{output_dir}/{species}_{model}/{contig}/sim.log` - Ancestry simulation timing and statistics
-- `{output_dir}/{species}_{model}/{contig}/sim.mutated.trees` - Tree sequence with mutations, compressed with `tszip`
-- `{output_dir}/{species}_{model}/{contig}/sim.mutated.log` - Mutation timing and statistics
-- `{output_dir}/{species}_{model}/{contig}/sim.mutated.vcf.gz` - `gzip` compressed VCF output, positions incremented by one relative to tree sequence
-- `{output_dir}/{species}_{model}/{contig}/sim.mutated.ancestral.fa.gz` - `gzip` compressed ancestral fasta
-- `{output_dir}/{species}_{model}/{contig}/sim.mutated.outgroup.fa.gz` - `gzip` compressed outgroup fasta
-- `{output_dir}/{species}_{model}/{contig}/sim.mutated.vcf.log` - VCF timing and statistics
+- `{output_dir}/{species}_{model}/{samples}/{contig}_{start}_{end}_sim_seed{seed}.init.trees` - Tree sequence (ancestry only, no mutations, compressed with `tszip`)
+- `{output_dir}/{species}_{model}/{samples}/{contig}_{start}_{end}_sim_seed{seed}.hapmap` - Recombination map
+- `{output_dir}/{species}_{model}/{samples}/{contig}_{start}_{end}_sim_seed{seed}.init.log` - Ancestry simulation timing and statistics
+- `{output_dir}/{species}_{model}/{samples}/{contig}_{start}_{end}_sim_seed{seed}.mutated.trees` - Tree sequence with mutations, compressed with `tszip`
+- `{output_dir}/{species}_{model}/{samples}/{contig}_{start}_{end}_sim_seed{seed}.mutated.log` - Mutation timing and statistics
+- `{output_dir}/{species}_{model}/{samples}/{contig}_{start}_{end}_sim_seed{seed}.mutated.vcf.gz` - `gzip` compressed VCF output, positions incremented by one relative to tree sequence
+- `{output_dir}/{species}_{model}/{samples}/{contig}_{start}_{end}_sim_seed{seed}.mutated.ancestral.fa.gz` - `bgzip` compressed ancestral fasta
+- `{output_dir}/{species}_{model}/{samples}/{contig}_{start}_{end}_sim_seed{seed}.mutated.outgroup.fa.gz` - `bgzip` compressed outgroup fasta
+- `{output_dir}/{species}_{model}/{samples}/{contig}_{start}_{end}_sim_seed{seed}.mutated.vcf.log` - VCF timing and statistics
+- `{output_dir}/{species}_{model}/{samples}/{contig}_{start}_{end}_sim_seed{seed}.mutated.params.csv` - Params file capturing key info to automate downstream inference
 
 ## Mutation Models
 

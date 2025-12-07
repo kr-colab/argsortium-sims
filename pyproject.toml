@@ -5,6 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "bgzip>=0.5.1",
+    "pandas>=2.3.3",
     "snakemake>=9.13.3",
     "stdpopsim>=0.3.0",
     "tszip>=0.2.6",
